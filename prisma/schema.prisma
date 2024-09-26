@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model categorias {
+  ID_CATEGORIA String        @id @db.VarChar(36)
+  DESCRICAO    String?       @db.VarChar(50)
+  ICONE        Bytes?        @db.Blob
+  INDICE_ICONE Int?
+  ID_USUARIO   Int?
+  lancamentos  lancamentos[]
+}
+
+model fotos {
+  ID_FOTO       String   @id @db.VarChar(36)
+  ID_LANCAMENTO String   @db.VarChar(36)
+  ID_USUARIO    Int      @default(0)
+  DATA          DateTime @default(dbgenerated("('0000-00-00')")) @db.Date
+  FOTO          Bytes
+  STATUS        String   @default("E") @db.Char(1)
+}
+
+model lancamentos {
+  ID_LANCAMENTO String      @id @db.VarChar(36)
+  ID_CATEGORIA  String?     @db.VarChar(36)
+  ID_USUARIO    Int?
+  VALOR         Decimal?    @db.Decimal(9, 2)
+  DATA          DateTime?   @db.Date
+  DESCRICAO     String?     @db.VarChar(100)
+  STATUS        String      @default("E") @db.Char(1)
+  categorias    categorias? @relation(fields: [ID_CATEGORIA], references: [ID_CATEGORIA], onDelete: NoAction, onUpdate: NoAction, map: "ID_CATEGORIA")
+  usuarios      usuarios?   @relation(fields: [ID_USUARIO], references: [ID_USUARIO], onDelete: NoAction, onUpdate: NoAction, map: "ID_USUARIO")
+
+  @@index([ID_CATEGORIA], map: "ID_CATEGORIA")
+  @@index([ID_USUARIO], map: "ID_USUARIO")
+}
+
+model usuarios {
+  ID_USUARIO  Int           @id @default(autoincrement())
+  NOME        String        @db.VarChar(50)
+  USER        String        @unique(map: "USER") @db.VarChar(50)
+  SENHA       String        @db.VarChar(100)
+  FOTO        Bytes
+  DATA_LIMITE DateTime      @db.Date
+  lancamentos lancamentos[]
+}
