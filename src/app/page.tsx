@@ -52,20 +52,20 @@ export default function LoginScreen() {
           <form onSubmit={handleSubmit}>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="user">User</Label>
+                <Label htmlFor="user">Usuário</Label>
                 <Input
                   id="user"
-                  placeholder="Enter your username"
+                  placeholder="Digite seu usuário..."
                   value={user}
                   onChange={(e) => setUser(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Senha</Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder="Digite sua senha..."
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
